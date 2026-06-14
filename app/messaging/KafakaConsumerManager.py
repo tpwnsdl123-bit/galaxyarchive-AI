@@ -58,18 +58,21 @@ class KafkaConsumerManager:
 
                 if msg is None:
                     continue
+                
+                error = msg.error()
 
-                if msg.error():
-                    if msg.error().code() == KafkaError._PARTITION_EOF:
-                        continue
-
-                    print(msg.error())
+                if error and error.code() == KafkaError._PARTITION_EOF:                         
                     continue
+                else:
+                    print(msg.error())
 
                 topic = msg.topic()
-                event = msg.value().decode("utf-8")
-
-                self._dispatch(topic, event)
+                
+                event = msg.value()
+                if event is not None:
+                    payload = event.decode("utf-8")
+                if topic is not None:
+                    self._dispatch(topic, payload)    
 
         except Exception as e:
             print(f"[Kafka] {e}")
