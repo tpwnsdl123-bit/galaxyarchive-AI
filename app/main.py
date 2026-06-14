@@ -12,7 +12,7 @@ if BASE_DIR not in sys.path:
 
 import uvicorn
 from fastapi import FastAPI
-
+from app.db.db_connection import test_connection
 from app.messaging.KafakaConsumerManager import KafkaConsumerManager
 from app.article.router.article_router import router as article_router
 from app.article.handler import article_handler
@@ -23,6 +23,10 @@ kafka_consumer_manager = KafkaConsumerManager()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
+
+    test_connection()
+ 
     # 이벤트 구독
     kafka_consumer_manager.start([
         "article-events",
@@ -43,6 +47,8 @@ app = FastAPI(
 
 # 라우터 등록
 app.include_router(article_router)
+
+
 
 
 @app.get("/")

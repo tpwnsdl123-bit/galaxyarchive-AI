@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+.env/
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# DB / local data
+*.sqlite3
+
+# FastAPI / uvicorn reload cache
+*.pid
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/

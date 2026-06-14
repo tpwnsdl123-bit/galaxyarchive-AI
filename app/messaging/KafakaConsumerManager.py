@@ -1,7 +1,12 @@
 import threading
 
 from confluent_kafka import Consumer, KafkaError
+import json
 
+from app.settings import (
+    KAFKA_BOOTSTRAP_SERVERS,
+    KAFKA_GROUP_ID
+)
 
 class KafkaConsumerManager:
     _instance = None
@@ -42,10 +47,10 @@ class KafkaConsumerManager:
         self._running = False
 
     def _run_loop(self, topics: list[str]):
-
+        
         consumer = Consumer({
-            "bootstrap.servers": "localhost:9092",
-            "group.id": "galaxy-archive-ai-group",
+            "bootstrap.servers": KAFKA_BOOTSTRAP_SERVERS,
+            "group.id": KAFKA_GROUP_ID,
             "auto.offset.reset": "earliest"
         })
 
@@ -54,14 +59,14 @@ class KafkaConsumerManager:
         try:
             while self._running:
 
-                msg = consumer.poll(1.0)
+                msg = consumer.poll(0.1)
 
                 if msg is None:
                     continue
                 
                 error = msg.error()
 
-                if error and error.code() == KafkaError._PARTITION_EOF:                         
+                if error and error.code() == KafkaError._PARTITION_EOF:
                     continue
                 else:
                     print(msg.error())
@@ -71,6 +76,10 @@ class KafkaConsumerManager:
                 event = msg.value()
                 if event is not None:
                     payload = event.decode("utf-8")
+                    try:
+                        payload = json.loads(payload)
+                    except json.JSONDecodeError:
+                        print(f"[Kafka] Invalid JSON in topic {topic}: {payload}")
                 if topic is not None:
                     self._dispatch(topic, payload)    
 
