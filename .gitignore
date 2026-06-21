@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Environment Variables
+.env
+.env.*
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kafka Local Data (사용한다면)
+kafka-data/
+zookeeper-data/
+
+# Model Cache
+models/
+cache/
+
+# HuggingFace
+.huggingface/
+hf_cache/
+
+# SentenceTransformer
+sentence_transformers/
+
+# SQLite
+*.db
+*.sqlite3
