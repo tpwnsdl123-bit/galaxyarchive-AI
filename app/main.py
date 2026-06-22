@@ -1,11 +1,15 @@
+import sys
+print("--- sys.path ---")
+for p in sys.path:
+    print(p)
+print("----------------")
+
 import os
 import sys
 from contextlib import asynccontextmanager
 
 # 프로젝트 루트 추가
-BASE_DIR = os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
@@ -13,7 +17,7 @@ if BASE_DIR not in sys.path:
 import uvicorn
 from fastapi import FastAPI
 from app.db.db_connection import test_connection
-from app.messaging.KafakaConsumerManager import KafkaConsumerManager
+from app.messaging.KafkaConsumerManager import KafkaConsumerManager
 from app.article.router.article_router import router as article_router
 from app.article.handler import article_handler
 
