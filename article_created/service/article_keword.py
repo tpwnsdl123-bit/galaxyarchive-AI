@@ -36,7 +36,14 @@ def extract_keywords_rank(text:str, text_embedding:list[float],cnt:int=5):
         reverse=True
     )[:cnt]
 
-    return [word for word, score in ranked_keywords]
+    keyword_score_pairs = [
+        {
+            "keyword": keyword,
+            "score": float(score)
+        }
+        for keyword, score in ranked_keywords
+    ]
+    return keyword_score_pairs
 
 
 def _extract_nouns(raw_text:str)->list[str]:
