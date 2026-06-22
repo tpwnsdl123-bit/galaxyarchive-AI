@@ -2,11 +2,10 @@ import json
 import logging
 from typing import Dict, Callable
 
-from consumer.kafka_consumer import KafkaConsumer
+from consumer.kafka_consumer import kafka_consumer
 from confluent_kafka import Message, KafkaError
 
-kafka_consumer = KafkaConsumer(bootstrap_servers='localhost:9092',group_id='embedding-worker')
-kafka_consumer.subscribe(['article-created'])
+kafka_consumer.subscribe(topics=['article-created'])
 
 handler_dispatcher:Dict[str, Callable] = {}
 
@@ -44,13 +43,13 @@ def _parse_msg(msg: Message)->dict | None:
 
     except UnicodeDecodeError as ue:
         logging.error("메시지 디코딩(utf-8) 실패: %s", ue)
-        return None
+        raise ue
     except json.JSONDecodeError as je:
         logging.error("JSON 파싱 에러 (올바른 JSON 형식이 아님): %s", je)
-        return None
+        raise je
     except Exception as e:
         logging.error("메시지 파싱 중 예상치 못한 에러: %s", e, exc_info=True)
-        return None
+        raise e
 
 def handler(topic:str):
     def wrapper(func):
