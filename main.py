@@ -2,16 +2,17 @@ import logging
 import article_created.handler.article_created_handler
 LOG_FORMAT = "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
 
+from config import(
+    LOG_LEVEL
+)
+
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=LOG_LEVEL,
     format=LOG_FORMAT,
     force=True
 )
 
 from consumer.worker import run_consumer
-
-
-
 
 
 if __name__ == '__main__':

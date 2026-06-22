@@ -17,3 +17,8 @@ ROOT_MODEL_DIR = os.getenv(
     "ROOT_MODEL_DIR",
     "./models"
 )
+
+LOG_LEVEL = os.getenv(
+    "LOG_LEVEL",
+    10
+)

@@ -10,5 +10,4 @@ model = BGEM3FlagModel(
 def embedding(title:str,raw_text:str):
     text = f"{title}\n{raw_text}"
     vector = model.encode([text])
-    logging.info("vector: {}".format(vector))
     return vector["dense_vecs"]
