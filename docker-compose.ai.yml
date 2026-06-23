@@ -1,6 +1,6 @@
 services:
   galaxy-ai-worker:
-    image: ghcr.io/tpwnsdl123-bit/galaxy-archive-ai:latest
+    image: ghcr.io/tpwnsdl123-bit/galaxyarchive-ai/galaxy-archive-ai:latest
     container_name: "galaxy-ai-worker"
 
     restart: unless-stopped
