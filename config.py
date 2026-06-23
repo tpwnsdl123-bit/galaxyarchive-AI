@@ -20,5 +20,5 @@ ROOT_MODEL_DIR = os.getenv(
 
 LOG_LEVEL = os.getenv(
     "LOG_LEVEL",
-    10
+    "INFO"
 )

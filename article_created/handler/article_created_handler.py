@@ -19,7 +19,7 @@ def article_created_handler(msg):
 
         message = {
             "articleId":article_id,
-            "denseVectors":dense_vectors,
+            "denseVectors":dense_vectors[0],
             "keywords":keywords
         }
 

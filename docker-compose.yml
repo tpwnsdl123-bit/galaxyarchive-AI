@@ -1,0 +1,23 @@
+# for local dev
+services:
+  galaxy-ai-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: "galaxy-ai-worker"
+
+    restart: unless-stopped
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "galaxy-kafka:29092"
+      ROOT_MODEL_DIR: /app/models/bge-m3
+    volumes:
+      - ./models:/app/models
+
+    networks:
+      - galaxy-network
+
+networks:
+  galaxy-network:
+    driver: bridge
