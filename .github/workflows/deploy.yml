@@ -14,12 +14,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync branch Master to Operation
+      - name: Sync branch Main to Operation
         run: |
           git config --global user.name "deploy-manager"
           git config --global user.email "wuwang8484@gmail.com"
           git checkout operation || git checkout -b operation
-          git reset --hard master
+          git reset --hard main
           git push origin operation --force
 
       - name: Authenticate GHCR
@@ -56,7 +56,7 @@ jobs:
             cd ~/galaxyarchive
 
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            
+
             docker compose -f docker-compose.ai.yml pull
             docker compose -f docker-compose.ai.yml up -d
             
