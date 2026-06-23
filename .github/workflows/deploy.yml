@@ -35,7 +35,7 @@ jobs:
           docker build -t ghcr.io/$REPO_LOWER/galaxy-archive-ai:latest .
           docker push ghcr.io/$REPO_LOWER/galaxy-archive-ai:latest
 
-      - name: Copy docker application composes
+      - name: Copy docker ai composes
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
