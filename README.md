@@ -1,4 +1,4 @@
-# GALAXY ARCHIVE AI WORKER
+# galaxyArchive AI WORKER
 ## Overview
 Galaxy Archive AI Worker는 Spring Application에서 발행한 이벤트를 소비하여 게시글 분석 작업을 수행하는 독립적 워커입니다.
 
