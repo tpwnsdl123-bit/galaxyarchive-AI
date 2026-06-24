@@ -1,12 +1,9 @@
 from kiwipiepy import Kiwi
-from FlagEmbedding import BGEM3FlagModel
+from model_configuration import getModel
 import numpy as np
 
 import logging
-model = BGEM3FlagModel(
-    model_name_or_path="./models/bge-m3",
-    use_fp16=True
-)
+model = getModel()
 
 kiwi = Kiwi()
 ALLOWED_TAGS = {"NNG","NNP","SL"}
