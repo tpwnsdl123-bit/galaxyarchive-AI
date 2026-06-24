@@ -1,5 +1,6 @@
 import logging
-import article_created.handler.article_created_handler
+
+
 LOG_FORMAT = "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
 
 from config import(
@@ -11,7 +12,8 @@ logging.basicConfig(
     format=LOG_FORMAT,
     force=True
 )
-
+import article_created.handler.article_created_handler
+import model_configuration
 from consumer.worker import run_consumer
 
 
