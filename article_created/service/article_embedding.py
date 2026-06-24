@@ -1,11 +1,8 @@
 from FlagEmbedding import BGEM3FlagModel
-
+from model_configuration import getModel
 import logging
 
-model = BGEM3FlagModel(
-    model_name_or_path="./models/bge-m3",
-    use_fp16=True
-)
+model = getModel()
 
 def embedding(title:str,raw_text:str):
     text = f"{title}\n{raw_text}"
