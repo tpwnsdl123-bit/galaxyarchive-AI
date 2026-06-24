@@ -1,3 +1,4 @@
+name: "galaxyarchive"
 # for local dev
 services:
   galaxy-ai-worker:
@@ -20,4 +21,5 @@ services:
 
 networks:
   galaxy-network:
-    driver: bridge
+    name: galaxy-network
+    external: true
