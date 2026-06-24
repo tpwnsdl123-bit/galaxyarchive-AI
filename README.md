@@ -36,4 +36,3 @@ Local Development
 
 Docker Compose
 > docker compose up -d
-

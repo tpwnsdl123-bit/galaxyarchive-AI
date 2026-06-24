@@ -1,3 +1,4 @@
+name: "galaxyarchive"
 services:
   galaxy-ai-worker:
     image: ghcr.io/tpwnsdl123-bit/galaxyarchive-ai/galaxy-archive-ai:latest
