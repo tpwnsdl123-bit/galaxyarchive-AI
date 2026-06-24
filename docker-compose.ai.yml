@@ -16,4 +16,4 @@ services:
 
 networks:
   galaxy-network:
-    driver: bridge
+    external: true
