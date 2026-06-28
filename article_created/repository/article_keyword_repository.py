@@ -1,0 +1,10 @@
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+
+def save_article_keyword(session:Session, article_id:int, keywords)->None:
+    sql = text("""
+        INSERT INTO article_key_word_entity (article_id, keyword, similarity) VALUES (:article_id, :keyword, :similarity)
+    """)
+
+    for keyword in keywords:
+        session.execute(sql, {"article_id": article_id, "keyword": keyword["keyword"], "similarity": keyword["score"]})

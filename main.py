@@ -12,8 +12,13 @@ logging.basicConfig(
     format=LOG_FORMAT,
     force=True
 )
+from database.database import db_connect
+db_connect()
+
+
 import article_created.handler.article_created_handler
 import model_configuration
+
 from consumer.worker import run_consumer
 
 
