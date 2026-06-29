@@ -4,6 +4,7 @@ from typing import Dict, Callable
 
 from consumer.kafka_consumer import kafka_consumer
 from confluent_kafka import Message, KafkaError
+from model_configuration import model_loaded_event
 
 kafka_consumer.subscribe(topics=['article-created'])
 
@@ -11,7 +12,11 @@ handler_dispatcher:Dict[str, Callable] = {}
 
 def run_consumer():
     try:
+        #임베딩 모델 로드 완료 까지 blocking
+        model_loaded_event.wait()
+
         while True:
+
             msg: Message|None = kafka_consumer.poll(1.0)
 
             if msg is None:
@@ -29,6 +34,7 @@ def run_consumer():
     except KeyboardInterrupt:
         kafka_consumer.close()
         logging.info("Kafka consumer stopped by keyboardInterrupt")
+
     except Exception as e:
         logging.exception(e)
 

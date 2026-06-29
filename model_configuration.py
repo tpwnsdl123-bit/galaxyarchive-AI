@@ -1,9 +1,13 @@
 import logging
 import os
+import threading
+
 import torch
 from FlagEmbedding import BGEM3FlagModel
 from huggingface_hub import snapshot_download
 from config import ROOT_MODEL_DIR
+
+model_loaded_event = threading.Event()
 
 # 전역 변수 초기화
 _model = None
@@ -30,6 +34,10 @@ def load_model():
             device=device  # 명시적 설정 권장
         )
         logging.info("BGE-M3 모델 로드 완료")
+
+        #모델 로드후 thread blocking 해제 이벤트 발행
+        model_loaded_event.set()
+
     except Exception:
         logging.critical("BGE-M3 모델 로드 실패", exc_info=True)
         raise
