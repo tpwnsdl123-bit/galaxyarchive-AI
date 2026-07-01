@@ -49,6 +49,7 @@ def article_created_handler(msg):
 
         #메세지 커밋처리
         kafka_consumer.commit()
+        
     except Exception as e:
 
         #embedding fail 메세지 발행
