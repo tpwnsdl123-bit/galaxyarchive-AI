@@ -17,6 +17,7 @@ db_connect()
 
 
 import article_created.handler.article_created_handler
+import article_cluster.handler.cluster_handler
 import model_configuration
 
 from consumer.worker import run_consumer
