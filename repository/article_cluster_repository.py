@@ -10,6 +10,8 @@ class ArticleDimension(TypedDict):
     article_id: int
     dimension: list[float]
     cluster_id: int
+    probability: float
+    outlier_score: float
 
 
 class ArticleClusterRepository:
@@ -91,6 +93,8 @@ class ArticleClusterRepository:
                 "x": article_dimension["dimension"][0],
                 "y": article_dimension["dimension"][1],
                 "z": article_dimension["dimension"][2],
+                "probability": article_dimension["probability"],
+                "outlier_score": article_dimension["outlier_score"],
             }
             for article_dimension in article_dimensions
         ]
@@ -98,9 +102,9 @@ class ArticleClusterRepository:
         self.session.execute(
             text("""
                  INSERT INTO cluster_article_entity
-                     (article_id, cluster_id, x, y, z)
+                     (article_id, cluster_id, x, y, z, probability, outlier_score)
                  VALUES
-                     (:article_id, :cluster_id, :x, :y, :z)
+                     (:article_id, :cluster_id, :x, :y, :z, :probability, :outlier_score)
                  """),
             params,
         )

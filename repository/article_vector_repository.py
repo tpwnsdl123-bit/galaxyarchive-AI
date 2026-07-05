@@ -26,7 +26,8 @@ class ArticleVectorRepository:
                         vector.vector AS vector
                  FROM article_entity article
                           JOIN article_vector_entity vector ON article.id = vector.article_id
-                 WHERE article.author_id = :user_id;
+                 WHERE article.author_id = :user_id
+                   AND article.is_deleted = false;
                  """),
             {"user_id": user_id}
         )
