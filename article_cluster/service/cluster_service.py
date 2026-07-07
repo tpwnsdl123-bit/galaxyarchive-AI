@@ -9,6 +9,16 @@ class ClusterResult(TypedDict):
 
 
 def cluster_dimensions(dimensions: list[list[float]]) -> list[ClusterResult]:
+    if len(dimensions) < 3:
+        return [
+            {
+                "cluster_id": -1,
+                "probability": 0.0,
+                "outlier_score": 0.0,
+            }
+            for _ in dimensions
+        ]
+
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=2,
         min_samples=1,
