@@ -6,6 +6,9 @@ services:
 
     restart: unless-stopped
 
+    env_file:
+      - .env
+    
     environment:
       KAFKA_BOOTSTRAP_SERVERS: "galaxy-kafka:29092"
       ROOT_MODEL_DIR: /app/models/bge-m3
