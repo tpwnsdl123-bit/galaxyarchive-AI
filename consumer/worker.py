@@ -2,15 +2,51 @@ import json
 import logging
 from typing import Dict, Callable
 
+from confluent_kafka.admin import AdminClient
+from confluent_kafka.cimpl import NewTopic
+
 from consumer.kafka_consumer import kafka_consumer
 from confluent_kafka import Message, KafkaError
 from model_configuration import model_loaded_event
 
-kafka_consumer.subscribe(topics=['article-created'])
+from config import(
+    KAFKA_BOOTSTRAP_SERVERS,
+)
 
 handler_dispatcher:Dict[str, Callable] = {}
 
+admin = AdminClient({"bootstrap.servers": KAFKA_BOOTSTRAP_SERVERS})
+
+def subscribe():
+    topics = list(handler_dispatcher.keys())
+
+    # 이미 존재하는 토픽 조회
+    metadata = admin.list_topics(timeout=5)
+    existing_topics = set(metadata.topics.keys())
+
+    # 없는 토픽만 생성
+    new_topics = [
+        NewTopic(topic=topic,num_partitions=1,replication_factor=1)
+        for topic in topics
+        if topic not in existing_topics
+    ]
+
+    if new_topics:
+        futures = admin.create_topics(new_topics)
+
+        for topic, future in futures.items():
+            try:
+                future.result()
+                logging.info("Created topic: %s", topic)
+            except Exception as e:
+                logging.warning("Failed to create topic %s: %s", topic, e)
+
+    # Consumer 구독
+    kafka_consumer.subscribe(topics)
+
+
 def run_consumer():
+    subscribe()
     try:
         #임베딩 모델 로드 완료 까지 blocking
         model_loaded_event.wait()
@@ -57,11 +93,16 @@ def _parse_msg(msg: Message)->dict | None:
         logging.error("메시지 파싱 중 예상치 못한 에러: %s", e, exc_info=True)
         raise e
 
+
+
+
 def handler(topic:str):
     def wrapper(func):
         handler_dispatcher[topic] = func
         return func
     return wrapper
+
+
 
 def _dispatch_msg(topic,payload):
     if handler_dispatcher.get(topic) is None:

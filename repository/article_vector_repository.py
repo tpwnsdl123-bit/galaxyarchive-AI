@@ -1,6 +1,11 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from typing import cast
+from typing import TypedDict
+import json
+
+class ArticleVectorRow(TypedDict):
+    article_id: int
+    vector: list[float]
 
 class ArticleVectorRepository:
     def __init__(self, session: Session):
@@ -14,14 +19,22 @@ class ArticleVectorRepository:
         """
         ),{"article_id":article_id, "article_vector":article_vector})
 
-    def find_all_article_vector_by_author(self, user_id: str) -> list[list[float]]:
+    def find_all_article_vector_by_author(self, user_id: str) -> list[ArticleVectorRow]:
         result = self.session.execute(
             text("""
-                 SELECT vector
+                 SELECT vector.article_id AS article_id,
+                        vector.vector AS vector
                  FROM article_entity article
                           JOIN article_vector_entity vector ON article.id = vector.article_id
-                 WHERE article.author_id = :user_id;
+                 WHERE article.author_id = :user_id
+                   AND article.is_deleted = false;
                  """),
             {"user_id": user_id}
         )
-        return cast(list[list[float]], result.scalars().all())
+        return [
+            {
+                "article_id": row["article_id"],
+                "vector": json.loads(row["vector"]),
+            }
+            for row in result.mappings()
+        ]

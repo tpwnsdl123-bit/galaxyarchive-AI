@@ -5,11 +5,23 @@ class ArticleKeywordRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def save_all(self, article_id:int, keywords)->None:
+    def save_all(self, article_id: int, keywords) -> None:
         sql = text("""
-            INSERT INTO article_key_word_entity (article_id, keyword, similarity) VALUES (:article_id, :keyword, :similarity)    
-        """)
-        self.session.execute(sql, {"article_id": article_id, "keyword": keywords})
+                   INSERT INTO article_key_word_entity
+                       (article_id, keyword, similarity)
+                   VALUES (:article_id, :keyword, :similarity)
+                   """)
+
+        params = [
+            {
+                "article_id": article_id,
+                "keyword": item["keyword"],
+                "similarity": item["score"],
+            }
+            for item in keywords
+        ]
+
+        self.session.execute(sql, params)
 
 
 
