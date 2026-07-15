@@ -7,7 +7,7 @@ from producer.kafka_producer import kafka_publisher
 from consumer.kafka_consumer import kafka_consumer
 
 from article_created.service.persist_embedding_service import article_embedding_persist
-from article_created.service.article_service import validate_article
+from article_created.service.article_service import validate_article, get_article
 
 
 @handler("article-created")
@@ -22,22 +22,21 @@ def article_created_handler(msg):
 
     try:
         logging.info(f"{article_id} : start embedding task")
-        title = msg.get("title")
-        raw_text = msg.get("rawText")
 
         #raise Exception("강제 테스트 에러 발생")
 
         #임베딩은 연산 자원 소모가 많기 때문에 유효하지 않은 요청 체크 후 게시글이 유효한지 확인하고 임베딩 진행
-        exist_article = validate_article(article_id)
+        article = get_article(article_id)
 
-        if not exist_article:
-            raise ValueError(f"invalid article id : {article_id}")
+        article_raw_text = article["raw_text"]
+        article_title = article["title"]
+        article_text = article["text"]
 
         #Dense 임베딩
-        dense_vectors = embedding(title,raw_text).tolist()
+        dense_vectors = embedding(article_title,article_text).tolist()
 
         #키워드 추출
-        keywords = extract_keywords_rank(raw_text,dense_vectors,5)
+        keywords = extract_keywords_rank(article_title, article_text, dense_vectors,5)
 
         #벡터 임베딩 값 영속화
         article_embedding_persist(article_id,dense_vectors[0],keywords)
@@ -49,7 +48,7 @@ def article_created_handler(msg):
 
         #메세지 커밋처리
         kafka_consumer.commit()
-        
+        logging.info(f"{article_id} : finish embedding task")
     except Exception as e:
 
         #embedding fail 메세지 발행

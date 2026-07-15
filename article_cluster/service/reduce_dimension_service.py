@@ -25,7 +25,7 @@ def reduce_dimension(
 def reduce_for_clustering(vecs: list[list[float]]) -> list[list[float]]:
     return reduce_dimension(
         vecs,
-        n_components=min(15, max(2, len(vecs) - 1)),
+        n_components=min(100, max(2, len(vecs) - 1)),
         min_dist=0,
     )
 

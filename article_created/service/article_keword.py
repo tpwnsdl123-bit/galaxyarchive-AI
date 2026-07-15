@@ -8,10 +8,22 @@ model = getModel()
 kiwi = Kiwi()
 ALLOWED_TAGS = {"NNG","NNP","SL"}
 
-def extract_keywords_rank(text:str, text_embedding:list[float],cnt:int=5):
-    nouns = _extract_nouns(text)
+def extract_keywords_rank(title:str, text:str, text_embedding:list[float],cnt:int=5):
+    nouns = _extract_nouns(title+text)
 
-    key_words = list(set(nouns))
+    keyword_map = {}
+
+    #대소문자 중복 제거
+    for noun in nouns:
+        normalized_noun = noun.strip().lower()
+        if not normalized_noun:
+            continue
+        if normalized_noun not in keyword_map:
+            keyword_map[normalized_noun] = noun.strip()
+
+
+
+    key_words = list(keyword_map.values())
 
     text_embedding = np.squeeze(text_embedding)
     keyword_embeddings = model.encode(key_words, return_dense=True)['dense_vecs']
@@ -29,16 +41,44 @@ def extract_keywords_rank(text:str, text_embedding:list[float],cnt:int=5):
 
     ranked_keywords = sorted(
         keyword_score_pairs,
-        key=lambda x: x[1],
+        key=lambda x: (x[1], len(x[0])),
         reverse=True
-    )[:cnt]
+    )
+
+    # 포함관계 단어 제거
+    selected_keywords = []
+    for keyword, score in ranked_keywords:
+        normalized_keyword = keyword.strip().lower()
+
+        is_longer_duplicate = any(
+            normalized_keyword != selected_keyword.strip().lower()
+            and selected_keyword.strip().lower() in normalized_keyword
+            for selected_keyword, _ in selected_keywords
+        )
+
+        if is_longer_duplicate:
+            continue
+
+        selected_keywords = [
+            (selected_keyword, selected_score)
+            for selected_keyword, selected_score in selected_keywords
+            if not (
+                    normalized_keyword != selected_keyword.strip().lower()
+                    and normalized_keyword in selected_keyword.strip().lower()
+            )
+        ]
+
+        selected_keywords.append((keyword, score))
+
+        if len(selected_keywords) >= cnt:
+            break
 
     keyword_score_pairs = [
         {
             "keyword": keyword,
             "score": float(score)
         }
-        for keyword, score in ranked_keywords
+        for keyword, score in selected_keywords
     ]
     return keyword_score_pairs
 
