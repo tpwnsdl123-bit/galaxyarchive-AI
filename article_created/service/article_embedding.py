@@ -6,5 +6,8 @@ model = getModel()
 
 def embedding(title:str,raw_text:str):
     text = f"{title}\n{raw_text}"
-    vector = model.encode([text])
+    vector = model.encode(
+        [text],
+        return_dense=True,
+        return_sparse=False)
     return vector["dense_vecs"]
