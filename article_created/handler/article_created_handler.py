@@ -33,7 +33,7 @@ def article_created_handler(msg):
         article_text = article["text"]
 
         #Dense 임베딩
-        dense_vectors = embedding(article_title,article_text).tolist()
+        dense_vectors = embedding(article_title,article_raw_text).tolist()
 
         #키워드 추출
         keywords = extract_keywords_rank(article_title, article_text, dense_vectors,5)
