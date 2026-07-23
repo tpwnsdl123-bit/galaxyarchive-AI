@@ -42,7 +42,7 @@ def article_user_cluster_handler(msg)->None:
         kafka_consumer.commit()
 
     except Exception as e:
-        logging.error(e)
+        logging.error(e, exc_info=True)
         kafka_consumer.commit()
 
 
