@@ -1,5 +1,5 @@
 from umap import UMAP
-
+import math
 
 def reduce_dimension(
     vecs: list[list[float]],
@@ -23,9 +23,15 @@ def reduce_dimension(
 
 
 def reduce_for_clustering(vecs: list[list[float]]) -> list[list[float]]:
+    count = len(vecs)
+
     return reduce_dimension(
         vecs,
-        n_components=max(2, min(15, len(vecs) - 1)),
+        n_components=min(
+            15,
+            max(2, int(math.sqrt(count))),
+            count - 2,
+        ),
         min_dist=0,
     )
 

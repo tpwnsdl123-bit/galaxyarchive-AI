@@ -1,6 +1,6 @@
 import hdbscan
 from typing import TypedDict
-
+import math
 
 class ClusterResult(TypedDict):
     cluster_id: int
@@ -21,7 +21,8 @@ def cluster_dimensions(dimensions: list[list[float]]) -> list[ClusterResult]:
 
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=2,
-        min_samples=1,
+        min_samples=3,
+        cluster_selection_method="eom"
     )
 
     clusterer.fit(dimensions)
