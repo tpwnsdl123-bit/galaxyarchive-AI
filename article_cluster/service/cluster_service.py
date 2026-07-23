@@ -22,6 +22,7 @@ def cluster_dimensions(dimensions: list[list[float]]) -> list[ClusterResult]:
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=2,
         min_samples=1,
+        cluster_selection_method="leaf"
     )
 
     clusterer.fit(dimensions)
