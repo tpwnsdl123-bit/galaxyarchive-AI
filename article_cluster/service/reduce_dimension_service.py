@@ -1,5 +1,5 @@
 from umap import UMAP
-
+import math
 
 def reduce_dimension(
     vecs: list[list[float]],
