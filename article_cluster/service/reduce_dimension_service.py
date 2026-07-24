@@ -11,7 +11,7 @@ def reduce_dimension(
 
     reducer = UMAP(
         n_components=n_components,
-        n_neighbors=max(2, min(15, len(vecs) - 1)),
+        n_neighbors=min(5, len(vecs) - 1),
         min_dist=min_dist,
         metric="cosine",
         init="random",
@@ -27,11 +27,7 @@ def reduce_for_clustering(vecs: list[list[float]]) -> list[list[float]]:
 
     return reduce_dimension(
         vecs,
-        n_components=min(
-            15,
-            max(2, int(math.sqrt(count))),
-            count - 2,
-        ),
+        n_components=max(math.sqrt(count), 50),
         min_dist=0,
     )
 
