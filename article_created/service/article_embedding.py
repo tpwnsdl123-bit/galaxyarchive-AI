@@ -1,4 +1,3 @@
-from FlagEmbedding import BGEM3FlagModel
 from model_configuration import getModel
 import logging
 

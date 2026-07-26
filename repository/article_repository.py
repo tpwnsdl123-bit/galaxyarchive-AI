@@ -11,7 +11,7 @@ class ArticleRepository:
             text("""
                 SELECT EXISTS (
                     SELECT 1
-                    FROM article_entity
+                    FROM article
                     WHERE id = :article_id
                     AND is_deleted = false
                 )
@@ -24,7 +24,7 @@ class ArticleRepository:
         result = self.session.execute(
             text("""
             SELECT title,raw_text,text
-                FROM article_entity
+                FROM article
                 WHERE id = :article_id
                 AND is_deleted = false
             """),

@@ -7,7 +7,7 @@ class ArticleKeywordRepository:
 
     def save_all(self, article_id: int, keywords) -> None:
         sql = text("""
-                   INSERT INTO article_key_word_entity
+                   INSERT INTO article_keyword
                        (article_id, keyword, similarity)
                    VALUES (:article_id, :keyword, :similarity)
                    """)
@@ -27,7 +27,7 @@ class ArticleKeywordRepository:
 
 def save_article_keyword(session:Session, article_id:int, keywords)->None:
     sql = text("""
-        INSERT INTO article_key_word_entity (article_id, keyword, similarity) VALUES (:article_id, :keyword, :similarity)
+        INSERT INTO article_keyword (article_id, keyword, similarity) VALUES (:article_id, :keyword, :similarity)
     """)
 
     for keyword in keywords:
