@@ -12,7 +12,8 @@ services:
 
     environment:
       KAFKA_BOOTSTRAP_SERVERS: "galaxy-kafka:29092"
-      ROOT_MODEL_DIR: /app/models/bge-m3
+      ROOT_MODEL_DIR: /app/models
+      EMBEDDING_MODEL_NAME: "Qwen/Qwen3-Embedding-0.6B"
     volumes:
       - ./models:/app/models
 

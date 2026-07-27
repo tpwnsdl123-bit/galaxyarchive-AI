@@ -7,7 +7,7 @@ Galaxy Archive AI Worker는 Spring Application에서 발행한 이벤트를 소�
 ---
 ### Features
 - Apache Kafka 기반 비동기 이벤트 처리
-- BGE-M3 모델을 활용한 게시글 임베딩 벡터 생성
+- Qwen3 Embedding 모델을 활용한 게시글 임베딩 벡터 생성
 - Kiwi 형태소 분석기를 활용한 핵심 키워드 추출 및 키워드 임베딩 게시글과 코사인 유사도를 이용 키워드 관련도 산출
 - Docker기반 컨테이너 환경
 - uv 를 통한 프로젝트 의존성 및 가상환경 관리
@@ -22,7 +22,13 @@ Galaxy Archive AI Worker는 Spring Application에서 발행한 이벤트를 소�
 ```
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092 #kafka bootstrap
 KAFKA_GROUP_ID=embedding-worker #cunsumer id
-ROOT_MODEL_DIR=./models #컨테이너 내부, 로컬 구동시 모델 캐싱 경로
+ROOT_MODEL_DIR=./models # 모델 캐시 루트 경로
+EMBEDDING_MODEL_NAME=Qwen/Qwen3-Embedding-0.6B # 사용할 임베딩 모델
+EMBEDDING_MODEL_DIR_NAME=Qwen__Qwen3-Embedding-0.6B # 선택값, ROOT_MODEL_DIR 하위 저장 디렉터리
+UMAP_CLUSTER_COMPONENTS=0 # 0이면 기사 수에 따라 자동 조절, 양수면 고정 차원
+UMAP_CLUSTER_MAX_COMPONENTS=50 # 자동 조절 시 최대 UMAP 축소 차원
+UMAP_CLUSTER_NEIGHBORS=8 # 낮출수록 지역 구조를 더 강하게 봄
+UMAP_CLUSTER_MIN_DIST=0.1 # 높일수록 UMAP 좌표가 덜 뭉침
 LOG_LEVEL=DEBUG # 로그레벨
 ```
 

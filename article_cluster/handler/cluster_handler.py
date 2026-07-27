@@ -8,7 +8,7 @@ from article_cluster.service.persist_cluster_service import article_cluster_pers
 from repository.article_cluster_repository import ArticleDimension
 from repository.article_vector_repository import ArticleVectorRepository
 from article_cluster.service.cluster_service import cluster_dimensions
-from article_cluster.service.reduce_dimension_service import reduce_for_clustering, reduce_for_view
+from article_cluster.service.reduce_dimension_service import reduce_for_view
 
 
 @handler("article-user-cluster")
@@ -24,9 +24,12 @@ def article_user_cluster_handler(msg)->None:
             user_article_vecs = ArticleVectorRepository(session).find_all_article_vector_by_author(user_id)
 
         vectors = [article_vec["vector"] for article_vec in user_article_vecs]
-        cluster_vectors = reduce_for_clustering(vectors)
+        cluster_terms = [
+            [article_vec["title"], *article_vec["keywords"]]
+            for article_vec in user_article_vecs
+        ]
         view_dimensions = reduce_for_view(vectors)
-        cluster_results = cluster_dimensions(cluster_vectors)
+        cluster_results = cluster_dimensions(vectors, cluster_terms)
         article_dimensions: list[ArticleDimension] = [
             {
                 "article_id": article_vec["article_id"],

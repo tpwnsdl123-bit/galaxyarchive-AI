@@ -32,7 +32,7 @@ class ArticleClusterRepository:
 
         result = self.session.execute(
             text("""
-                 INSERT INTO user_cluster_snapshot_entity
+                 INSERT INTO user_cluster_snapshot
                      (algorithm, article_count, cluster_count, created_at, run_id, status, user_id)
                  VALUES
                      (:algorithm, :article_count, :cluster_count, NOW(), :run_id, :status, :user_id)
@@ -64,7 +64,7 @@ class ArticleClusterRepository:
         for label, article_count in article_counts_by_label.items():
             result = self.session.execute(
                 text("""
-                     INSERT INTO user_cluster_entity
+                     INSERT INTO user_cluster
                          (article_count, is_noise, label, snapshot_id)
                      VALUES
                          (:article_count, :is_noise, :label, :snapshot_id)
@@ -101,7 +101,7 @@ class ArticleClusterRepository:
 
         self.session.execute(
             text("""
-                 INSERT INTO cluster_article_entity
+                 INSERT INTO cluster_article
                      (article_id, cluster_id, x, y, z, probability, outlier_score)
                  VALUES
                      (:article_id, :cluster_id, :x, :y, :z, :probability, :outlier_score)
