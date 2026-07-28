@@ -6,7 +6,7 @@ class ArticleRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def is_exist_article(self, article_id: int) -> bool:
+    def is_exist_article_with_status(self, article_id: int, status:str) -> bool:
         result = self.session.execute(
             text("""
                 SELECT EXISTS (
@@ -14,9 +14,10 @@ class ArticleRepository:
                     FROM article
                     WHERE id = :article_id
                     AND is_deleted = false
+                    AND status = :status
                 )
             """),
-            {"article_id": article_id}
+            {"article_id": article_id, "status": status}
         )
         return bool(result.scalar())
 

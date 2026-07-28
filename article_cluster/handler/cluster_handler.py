@@ -19,6 +19,8 @@ def article_user_cluster_handler(msg)->None:
         kafka_consumer.commit()
         return
 
+    logging.info(f"{user_id} : start user clustering task")
+
     try:
         with get_session() as session:
             user_article_vecs = ArticleVectorRepository(session).find_all_article_vector_by_author(user_id)
@@ -43,7 +45,7 @@ def article_user_cluster_handler(msg)->None:
 
         article_cluster_persist(user_id, article_dimensions)
         kafka_consumer.commit()
-
+        logging.info(f"{user_id} : finish user clustering task")
     except Exception as e:
         logging.error(e, exc_info=True)
         kafka_consumer.commit()
