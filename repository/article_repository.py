@@ -21,15 +21,16 @@ class ArticleRepository:
         )
         return bool(result.scalar())
 
-    def get_article(self, article_id: int)->dict|None:
+    def get_article_with_status(self, article_id: int,status:str)->dict|None:
         result = self.session.execute(
             text("""
             SELECT title,raw_text,text
                 FROM article
                 WHERE id = :article_id
                 AND is_deleted = false
+                AND status = :status
             """),
-            {"article_id": article_id}
+            {"article_id": article_id, "status": status}
         )
         row = result.mappings().first()
 

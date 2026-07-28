@@ -7,7 +7,7 @@ from producer.kafka_producer import kafka_publisher
 from consumer.kafka_consumer import kafka_consumer
 
 from article_created.service.persist_embedding_service import article_embedding_persist
-from article_created.service.article_service import validate_article, get_article
+from article_created.service.article_service import get_article
 
 
 @handler("article-created")
