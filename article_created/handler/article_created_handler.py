@@ -7,7 +7,7 @@ from producer.kafka_producer import kafka_publisher
 from consumer.kafka_consumer import kafka_consumer
 
 from article_created.service.persist_embedding_service import article_embedding_persist
-from article_created.service.article_service import validate_article, get_article
+from article_created.service.article_service import get_article
 
 
 @handler("article-created")
@@ -26,7 +26,7 @@ def article_created_handler(msg):
         #raise Exception("강제 테스트 에러 발생")
 
         #임베딩은 연산 자원 소모가 많기 때문에 유효하지 않은 요청 체크 후 게시글이 유효한지 확인하고 임베딩 진행
-        article = get_article(article_id)
+        article = get_article(article_id, "PENDING")
 
         article_raw_text = article["raw_text"]
         article_title = article["title"]
