@@ -14,6 +14,7 @@ from article_cluster.service.reduce_dimension_service import reduce_for_view
 @handler("article-user-cluster")
 def article_user_cluster_handler(msg)->None:
     user_id = _extract_user_id(msg)
+
     if user_id is None:
         logging.warning("user id is undefined or invalid uuid: %s", msg)
         kafka_consumer.commit()
@@ -44,8 +45,10 @@ def article_user_cluster_handler(msg)->None:
         ]
 
         article_cluster_persist(user_id, article_dimensions)
+
         kafka_consumer.commit()
         logging.info(f"{user_id} : finish user clustering task")
+
     except Exception as e:
         logging.error(e, exc_info=True)
         kafka_consumer.commit()
@@ -55,7 +58,6 @@ def _extract_user_id(msg) -> str | None:
     user_id = msg.get("userId") if isinstance(msg, dict) else msg
     if not isinstance(user_id, str) or not user_id.strip():
         return None
-
     try:
         return str(UUID(user_id))
     except ValueError:
