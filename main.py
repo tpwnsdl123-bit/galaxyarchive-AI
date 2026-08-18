@@ -18,6 +18,8 @@ db_connect()
 
 import article_created.handler.article_created_handler
 import article_cluster.handler.cluster_handler
+# import 시점에 @handler가 실행되어 trending topic handler가 등록된다.
+import article_trending.handler.article_tranding_handler
 import model_configuration
 
 from consumer.worker import run_consumer
